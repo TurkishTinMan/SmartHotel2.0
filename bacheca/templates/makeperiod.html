@@ -1,0 +1,58 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Configura i periodi
+{% endblock %}
+
+
+{% block content %}
+   
+                 <div class="col m8 offset-m2">
+                      <h3>CONFIGURA I TUOI PERIODI STAGIONALI</h3>
+                       <a class="btn" onclick="Materialize.toast('Configura i tuoi periodi stagionali<br> ES: Bassa stagione dal al<br>NOTA BENE</b>la configurazione tiene conte del mese e del giorno<br>Puoi sempre modificare i periodi in seguito',10000)">?</a>
+{% if todoperiodo %}
+<form role="form" id="formper" action="{% url 'makeperiod' %}" method="POST">
+    {% csrf_token %}
+    <div>
+        <label>Periodo 1:</label>
+        <input type="text" name="periodo-1">
+    </div>
+    <div>
+        <label>Fine:</label>
+        
+        <input type="date" name="fine-1"  id="fine-1" class="datepicker">
+    </div>
+</form>
+{% else %}
+{% for periodo in periodi %}
+<p>{{periodo.name}} - {{periodo.start_data|date:'d-m'}} - {{periodo.end_data|date:'d-m'}}</p>
+{% endfor %}
+{% endif %}
+             </div>
+                
+
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="{{STATIC_URL}}js/custom-per.js"></script>
+<script> 
+$('.datepicker').pickadate({
+    selectMonths: true,
+    selectYears:false,
+    format:'dd/mm',
+    min:[2016,12,1],
+    max:new Date(2017,11,31)
+  });
+</script>
+
+<style>
+.picker__year-display{
+    display: none;!important
+}
+.picker__year{
+    display: none;!important
+}
+.btn-flat.picker__today{
+    display: none;!important
+}
+</style>
+{% endblock %}

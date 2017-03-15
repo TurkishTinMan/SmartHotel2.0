@@ -1,0 +1,62 @@
+{% extends "Head/base.html" %}
+{% block css_special %}
+<style>
+#prenotazionitable_length{width:20%; }
+#prenotazionitable_filter{
+	width:70%;
+}
+#prenotazionitable_wrapper{background: #00796b  !important}
+label {
+    color: #ffffff;
+    text-align: -webkit-right;
+    float: right;
+    font-size: 1rem;
+    font-weight: bold;
+padding:1%;
+}
+#prenotazionitable_length > label > div > input, #prenotazionitable_filter > label > input[type="search"]{background-color: #26a69a  !important;}
+</style>
+    {% endblock %}
+{% block title %}
+Prenotazioni
+{% endblock %}
+{% block content %}
+
+ 	      <table class="striped highlight centered bordered responsive-table white" id="prenotazionitable">
+            <thead>
+              <tr>
+                  <th data-field="id">ID</th>
+                  <th data-field="name">Cliente</th>
+                  <th data-field="camera">Camera</th>
+                  <th data-field="data_inizio">Data Inizio</th>
+                  <th data-field="data_fine">Data Fine</th>
+                  <th data-field="Ospiti">Ospiti</th>
+                  <th data-field="Acconto">Acconto</th>
+                  <th data-field="Conto">Conto</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for prenotazione in prenotazioni %}
+                <tr>
+                    <td><a href="{% url 'index' %}prenotazione/{{prenotazione.id}}/">{{prenotazione.id}}</a></td>
+                    <td><a href="{% url 'index' %}client/{{prenotazione.cliente.id}}/">{{prenotazione.cliente.cognome}}</a></td>
+                    <td><a href="{% url 'index' %}room/{{prenotazione.camera.id}}/">{{prenotazione.camera.numero}}</a></td>
+                    <td>{{prenotazione.data_inizio|date:'Y/m/d'}}</td>
+                    <td>{{prenotazione.data_fine|date:'Y/m/d'}}</td>
+                    <td>{{prenotazione.adulti}}</td>
+                    <td>{% if prenotazione.acconto_versato %}{{prenotazione.acconto_fatto}}{% else %} non effettuato {% endif %}</td>
+                    <td>{{prenotazione.conto_base}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            
+{% endblock %}
+
+        
+{% block script %}
+<link href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" type="text/css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script>    
+$('#prenotazionitable').DataTable();
+</script>
+{% endblock %}

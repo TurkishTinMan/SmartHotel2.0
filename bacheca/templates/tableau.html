@@ -1,0 +1,97 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Tableau
+{% endblock %}
+
+
+{% block content %}
+<div class="fixed-action-btn toolbar">
+    <a class="btn-floating btn-large red">
+      <i class="large material-icons">menu</i>
+    </a>
+    <ul>
+        <form id="goback" action="{% url 'tableau' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="start" value="{{datagobackstart|date:'d/m/Y'}}">
+            <input type="hidden" name="end" value="{{datagobackend|date:'d/m/Y'}}">
+        </form>
+        <form id="gobackshort" action="{% url 'tableau' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="start" value="{{datagobackshortstart|date:'d/m/Y'}}">
+            <input type="hidden" name="end" value="{{datagobackshortend|date:'d/m/Y'}}">
+        </form>
+        <form id="goforward" action="{% url 'tableau' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="start" value="{{datagoforwardstart|date:'d/m/Y'}}">
+            <input type="hidden" name="end" value="{{datagoforwardend|date:'d/m/Y'}}">
+        </form>
+        <form id="goforwardshort" action="{% url 'tableau' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="start" value="{{datagoforwardshortstart|date:'d/m/Y'}}">
+            <input type="hidden" name="end" value="{{datagoforwardshortend|date:'d/m/Y'}}">
+        </form>
+
+        <li class="waves-effect yellow" alt="aventi"><a onclick="$('#goback').submit()" ><i class="material-icons">chevron_left</i></a></li>
+        <li class="waves-effect yellow darken-2"><a onclick="$('#gobackshort').submit()"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+        <li class="waves-effect blue darken-2"><a onclick="$('#goforwardshort').submit()"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>    
+        <li class="waves-effect blue"><a onclick="$('#goforward').submit()"><i class="material-icons">chevron_right</i></a></li>
+        <li><a class="btn-floating  darken-4"><i class="material-icons">view_module</i>tableau</a></li>
+        <li><a class="btn-floating  darken-4"><i class="material-icons">mode_edit</i>prenota</a></li>
+        <li><a class="btn-floating  darken-4"><i class="material-icons">loyalty</i>camere</a></li>
+        <li><a class="btn-floating  darken-3"><i class="material-icons">contact_mail</i>rubrica</a></li>
+        <li><a class="btn-floating  darken-2"><i class="material-icons">speaker_notes</i>note</a></li>
+        <li><a class="btn-floating  darken-1"><i class="material-icons">touch_app</i>stripmode</a></li>
+        <li><a class="btn-floating  lighter-4"><i class="material-icons">timeline</i>reportannuale</a></li>
+    </ul>
+</div>
+
+<style>
+td,th{
+    min-width: 0px!important;
+    width:calc(100% / calc({{date|length}}+1));
+}
+</style>
+
+<table class="table">
+    <thead>
+        <th>
+                <div class="col s6 grey darken-5">	 
+                    <input id="from"  class="datepicker" placeholder="DA:" style="margin:0;height:0.8rem">
+                </div>
+                <div class="col s6 grey darken-3">
+                    <input id="to"  class="datepicker" placeholder="a:" style="margin:0;height:0.8rem">
+                </div>
+            </th>
+        {% for day in date %}
+            <th>{{day|date:'d-m'}}</th>
+        {% endfor %}
+        </thead>      
+    <tbody>
+        {% for camera, row in matrix.items %}
+            <tr>
+                <td class="headcol" style="width:100px;color:black;"><a href="{% url 'index' %}room/{camera.id}">{{camera.numero}}</a></td>
+                {% for data,stato in row.items  %}
+                <td>
+                    {% if stato.start == stato.fine %}
+                        {% if stato.start  %}
+                            <a href="{% url 'index' %}prenotazione/{{stato.start.id}}/">{{stato.start.cliente.cognome}}</a>
+                        {% endif %}
+                    {% else %}
+                        {% if stato.start  %}
+                            <a href="{% url 'index' %}prenotazione/{{stato.start.id}}/">{{stato.start.cliente.cognome}}</a>
+                        {% endif %}
+                        {% if stato.fine %}
+                            <a href="{% url 'index' %}prenotazione/{{stato.fine.id}}/">{{stato.fine.cliente.cognome}}</a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+    {% endfor %} 
+    </tbody>
+</table>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery-2.1.1.js"></script>
+{% endblock %}

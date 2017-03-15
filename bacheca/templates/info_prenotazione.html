@@ -1,0 +1,234 @@
+{% extends "Head/base.html" %}
+
+{% block title %}
+Prenotazione {{prenotazione.cliente.cogcliente.nome}} cod:{{prenotazione.id}} 
+{% endblock %}
+
+{% block css_special %}
+<style>
+    h4{font-size:1.8rem}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+<h3 class="teal white-text center-align uppercase z-depth-2" style="padding: 1%">Prenotazione <a href="{% url 'index' %}client/{{prenotazione.cliente.id}}">{{prenotazione.cliente.cognome}}</a></h3>
+    <ul class="tabs" style="overflow: hidden">
+        <li class="tab col s3">
+            <a class="active" href="#info">
+                <h4>Informazioni</h4>
+            </a>
+        </li>
+        <li class="tab col s3">
+            <a  href="#modifica">
+                <h4>Modifica</h4>
+            </a>
+        </li>
+    </ul>
+    <div id="info">
+        <div class="col s12 m6 l6 card teal darken-2 white-text center-align">   
+            <h3 class="white-text ">Informazioni</h3>
+            {{prenotazione.data_inizio|date:'d/m/Y'}} - {{prenotazione.data_fine|date:'d/m/Y'}}
+            Camera:{{prenotazione.camera.numero}}
+            
+            <h3 class="white-text ">Dettagli Conto</h3>
+            <h4 class="white-text "> CONTO: {{prenotazione.conto_base}} €	
+                <br>
+                <hr>
+                ACCONTO: {% if prenotazione.acconto_fatto %}<i class="material-icons">done</i>{% else %}NO{% endif %}
+                <br>
+                SCONTO:{%for scontoprenotazione in scontiprenotazione %}{{scontoprenotazione.quantita}}{{scontoprenotazione.sconto.name}}{% endfor %}
+                <br>
+                EXTRA: {%for extraprenotazione in extrasprenotazione %}{{extraprenotazione.quantita}}{{extraprenotazione.extra.name}}{% endfor %}
+            </h4>
+            <hr>
+            <h4 class="red-text">Totale: {{tot}} </h4>
+            <br>
+            <a href="#" class="btn">Stampa</a>
+        </div>
+        <div class="col s12 m6 l6 center-align ">
+            <ul class="collapsible" data-collapsible="accordion">
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">filter_drama</i>Visualizza Aggiungi Note    	 
+                    </div>
+                    <div class="collapsible-body" >
+                        <div class="row">
+                            <div class="col m6 l6">	
+                                <h4 class="orange-text">Note</h4>        
+                                <form action="{% url 'index'%}prenotazione/{{prenotazione.id}}/" method="post">
+                                    {% csrf_token %}
+                                    <div class="input-field" style="padding:30px">       		
+                                        <textarea id="textarea1" class="materialize-textarea" name="nota"></textarea>
+                                        <label for="textarea1">Nuova nota</label>
+                                        <button type="submit" class="waves-effect waves-light btn blue"><i class="material-icons left">add</i>Salva </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col m6 l6">
+                                <h4>Le note prenotazione</h4>
+                                {% for nota in note %}
+                                {{nota.data}}-{{nota.causale}}<br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">place</i>SCONTI</div>
+                    <div class="collapsible-body">
+                        {%for scontoprenotazione in scontiprenotazione %}
+                            <div class="chip red white-text">
+                                Sconto #{{scontoprenotazione.quantita}}:{{scontoprenotazione.sconto.name}}:{{scontoprenotazione.sconto.percentage}}
+                                <a href="{% url 'index' %}eliminatescontofromprenotazione/{{scontoprenotazione.id}}/"><i class="close material-icons">close</i></a>
+                            </div>
+                        {% endfor %}
+                        <form action="{% url 'add_sconto'%}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{prenotazione.id}}" name="prenotazione"/>
+                            <div class="input-field " style="padding:30px">
+                                <select name="sconto">
+			                         <option value="" disabled selected>Scegli sconto</option>
+                                      {% for sconto in sconti %}
+                                      <option value="{{sconto.id}}">{{sconto.name}}</option>
+                                      {% endfor %}
+			                     </select>
+                                <button type="submit" class="waves-effect waves-light btn blue"><i class="material-icons left">add</i>Applica sconto </button>
+			                 </div>
+                        </form>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">whatshot</i>EXTRA</div>
+                    <div class="collapsible-body" style="padding:30px">
+                        {%for extraprenotazione in extrasprenotazione %}
+                            <div class="chip red white-text">
+                                Extra #{{extraprenotazione.quantita}}:{{extraprenotazione.extra.name}}:{{extraprenotazione.extra.costo}}
+                                <a href="{% url 'index' %}eliminatextrafromprenotazione/{{extraprenotazione.id}}/"><i class="close material-icons">close</i></a>
+                            </div>
+                        {% endfor %}
+
+                        
+                        
+                        <form action="{% url 'add_extra'%}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{prenotazione.id}}" name="prenotazione"/>
+                            <div class="input-field " style="padding:30px">
+                                <select name="extra">
+                                  <option value="" disabled selected>Scegli extra</option>
+                                 {% for extra in extras %}
+                                  <option value="{{extra.id}}">{{extra.name}}</option>
+                                  {% endfor %}
+                                </select>
+                                <button type="submit" class="waves-effect waves-light btn blue"><i class="material-icons left">add</i>Aggiungi Extra a conto </button>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+  </ul>
+ 		 
+    </div>
+    </div>
+             	
+    <div id="modifica" class="col s12 center-align">
+    	<form action="{% url 'index' %}modifyprenotazione/{{prenotazione.id}}/" method="POST" >
+                    {% csrf_token %}
+                    <div class="col s12 center-align">
+                        <div class="col s6">
+                            <h4>Data inizio:</h4>
+                        </div>
+                        <div class="col s6">
+                            <input name="data_inizio" type="date" value="{{prenotazione.data_inizio|date:'d/m/Y'}}" class="bordered flow-text">
+                        </div>
+                        <div class="col s6">
+                            <h4>Data fine:</h4>
+                        </div>
+                        <div class="col s6">
+                            <input name="data_fine" type="date" class="datepicker picker__input" placeholder="{{prenotazione.data_fine|date:'d/m/Y'}}" value="{{prenotazione.data_fine|date:'d/m/Y'}}" class="bordered flow-text">
+                        </div>
+                        
+    user                = models.ForeignKey(User)
+    data_inizio         = models.DateField()
+    data_fine           = models.DateField()
+    cliente             = models.ForeignKey(Client)
+    camera              = models.ForeignKey(Camera)
+    adulti              = models.IntegerField()
+    conto_base          = models.DecimalField(max_digits=8, decimal_places=2)
+    acconto_fatto       = models.DecimalField(max_digits=8, decimal_places=2)
+    acconto_versato     = models.BooleanField(default=False)
+    sconto              = models.DecimalField(max_digits=8, decimal_places=2)
+    notti               = models.IntegerField()
+
+                        
+                        
+                    <div class="col s6">
+                   <h4>  Numero Posti:</h4></div>
+                    <div class="col s6">
+                    <input name="cliente.nome" type="number" value="{{prenotazione.cliente.nome}}" class="flow-text">
+                    </div>
+                    <div class="col s6">
+                   <h4>  Numero Posti Extra:</h4></div>
+                    <div class="col s6">
+                    <input name="cogcliente.nome" type="number" value="{{prenotazione.cogcliente.nome}}" class="flow-text">
+                    </div>
+                    <div class="col s6">
+                   <h4> Cambia tipo:</h4></div>
+                    <div class="col s6">
+                    <select name="tipo">
+                        {% for tipo in tipi %}
+                        <option value="{{tipo.id}}" {% if prenotazione.tipo.id == tipo.id %}selected{% endif %}>{{tipo.name}}</option>    
+                        {% endfor %}
+                    </select>
+                    </div>
+                    </div>
+                    <button class="btn waves-effect waves-light " type="submit" name="action">Applica modifiche
+  					  <i class="material-icons right">done</i>
+  					</button>
+                    
+                    </form>
+                    
+                    </div>                   
+             	<!-- Modal Structure -->
+
+</div>
+  <a class="waves-effect waves-light btn red modal-trigger left " id="openmodal"><i class="material-icons">delete_forever</i></a>
+
+  <!-- Modal Structure -->
+  <div id="elimina" class=" bottom-sheet red lighten-2 modal">
+    <div class="modal-content">
+      <h4>ATTENZIONE     <i class="large material-icons red-text text-darken-3 right">warning</i>
+</h4>
+      <p>Si sta per eliminare una camera!<br>
+      	Tutti i dati relativi a questa prenotazione andranno cancellati definitivamente
+      </p>
+    </div>
+    <div class="modal-footer red lighten-1">
+    <a href="{% url 'index' %}eliminateprenotazione/{{prenotazione.id}}/" class="btn red darken-3">CONFERMA</a>
+<a class="waves-effect waves-light btn left" id="closemodal">ESCI</a>
+  </div>      	
+{% endblock %}
+{% block script %}
+<script>  
+jQuery( document ).ready(function() {
+    jQuery('#elimina').modal({
+        dismissible: true, // Modal can be dismissed by clicking outside of the modal
+        opacity: 0.5, // Opacity of modal background
+        in_duration: 300, // Transition in duration
+        out_duration: 200, // Transition out duration
+        starting_top: '4%', // Starting top style attribute
+        ending_top: '10%', // Ending top style attribute
+        ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+            console.log(modal, trigger);
+            console.log("ready");
+        },
+    });
+    jQuery('#elimina').modal();
+    jQuery('#openmodal').bind( "click" , function(){
+        jQuery('#elimina').modal('open');
+    });
+    jQuery('#closemodal').bind( "click" , function(){
+        jQuery('#elimina').modal('close');
+    });
+});     
+</script>
+{% endblock %}

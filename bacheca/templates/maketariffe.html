@@ -1,0 +1,47 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Configura le tariffe
+{% endblock %}
+
+{% block content %}
+
+    <!-- Start Page Loading -->
+    <div id="loader-wrapper">
+        <div id="loader"></div>        
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+    <!-- End Page Loading -->
+
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+
+    {% include "Menu/menu.html" %}
+    <!-- START MAIN -->
+    
+             	 <h3 class="blue-grey white-text center-align uppercase z-depth-2" style="padding: 1%">Configura il listino prezzi</h3>
+             	   <a class="btn" onclick="Materialize.toast('Assegna il costo di ogni camera<br>nei vari periodi', 11000)">?</a>
+
+             	<div class="col l8 m8 offset-l2 offset-m2">
+                <form role="form" action="{% url 'maketariffe' %}" method="POST">
+                    {% csrf_token %}
+                    {% for periodo in periodi %}
+                        {% for tipo in tipi %}
+                            <div class="input-field col l8 m8 s12 ">                            	
+          						<label for="{{tipo.id}}-{{periodo.id}}">Prezzo {{tipo.name}} nel periodo {{periodo.name}}</label>
+                               
+                                <input type="number" step=".01" name="{{tipo.id}}-{{periodo.id}}" id="{{tipo.id}}-{{periodo.id}}">
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                      <button class="btn waves-effect waves-light green btn-large" type="submit" name="action">Salva Listini
+    <i class="material-icons right">done</i>
+  </button>               
+                </form>
+                </div>
+                
+{% endblock %}
+
+
+{% block script %}
+
+{% endblock %}

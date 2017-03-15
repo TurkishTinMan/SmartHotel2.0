@@ -1,0 +1,79 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Camera {{room.numero}}
+{% endblock %}
+ {% block css_special %}
+ <style>
+ 	h4{font-size:1.8rem}
+ </style>
+    {% endblock %}
+
+
+{% block content %}
+
+               	<div class="col s12">
+     			 <ul class="tabs" style="overflow: hidden">
+ 				   <li class="tab col s3"><a class="active" href="#info"><h4>Informazioni</h4></a></li>
+ 				   <li class="tab col s3"><a  href="#modifica"><h4>Modifica</h4></a></li>
+        	     </ul>
+   			 </div>
+   			 <div class="col s12">
+    <div id="info">
+    	<div class="col s6 card blue-grey darken-1 white-text center-align">
+    <h4>NUMERO POSTI: {{room.numero_posti}}<br><hr>
+    	{% if room.numero_posti_extra %}<span class="red-text lighten-1 bold"> Posti Extra</span> {{room.numero_posti_extra}} <br><hr>{% endif %}
+             	TIPO CAMERA: {{room.tipo.name}}<br><hr>
+             	NUMERO POSTI EXTRA {{room.numero}} </h4>
+     </div>
+ 	<div class="col s6 center-align ">
+ 		 <h4 class="orange-text">Note</h4>
+        {% for nota in note %}
+            {{nota.data}}-{{nota.causale}}
+        {% endfor %}
+        <form action="{% url 'index'%}room/{{room.id}}/" method="post">
+            {% csrf_token %}
+        <div class="input-field col s9 offset-s1 center-align">       		
+          <textarea id="textarea1" class="materialize-textarea" name="nota"></textarea>
+          <label for="textarea1">Nuova nota</label>
+          <button type="submit" class="waves-effect waves-light btn-large"><i class="material-icons left">add</i>button</button>
+        </div>
+        </form>
+    </div>
+    </div>
+             	
+    <div id="modifica" class="col s12 center-align">
+    	<form action="{% url 'index' %}modifyroom/{{room.id}}/" method="POST" >
+                    {% csrf_token %}
+                    <div class="col s12 center-align">
+                    	<div class="col s6">
+                   <h4>  Numero Camera:</h4></div>
+                     <div class="col s6">
+                     <input name="numero" type="number" value="{{room.numero}}" class="bordered flow-text">
+                    </div>
+                    <div class="col s6">
+                   <h4>  Numero Posti:</h4></div>
+                    <div class="col s6">
+                    <input name="numero_posti" type="number" value="{{room.numero_posti}}" class="flow-text">
+                    </div>
+                    <div class="col s6">
+                   <h4>  Numero Posti Extra:</h4></div>
+                    <div class="col s6">
+                    <input name="numero_posti_extra" type="number" value="{{room.numero_posti_extra}}" class="flow-text">
+                    </div>
+                    <div class="col s6">
+                   <h4> Cambia tipo:</h4></div>
+                    <div class="col s6">
+                    <select name="tipo">
+                        {% for tipo in tipi %}
+                        <option value="{{tipo.id}}" {% if room.tipo.id == tipo.id %}selected{% endif %}>{{tipo.name}}</option>    
+                        {% endfor %}
+                    </select>
+                    </div>
+                    </div>
+                    <button class="btn waves-effect waves-light " type="submit" name="action">Applica modifiche
+  					  <i class="material-icons right">done</i>
+  					</button>
+                    
+                    </form>
+                    </div>                      	
+{% endblock %}

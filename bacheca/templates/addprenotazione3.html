@@ -1,0 +1,77 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Nuova prenotazione
+{% endblock %}
+
+
+{% block content %}
+
+ <h3 class="teal white-text center-align uppercase z-depth-2" style="padding: 1%">Seleziona o Aggiungi intestatario prenotazione</h3>
+ <div class="row">
+<div class="col l8 offset-l2 flow-text" >
+              <h5 >Riassunto</h5><br>
+              Prenotazione camera <b>{{camera.numero}}</b>  dal: <b>{{start}}</b> al: <b>{{end}}</b><br>
+                 Per: <b>{{num_ospiti}}</b> ospiti<br>
+                 <hr>
+                 Conto base: € <b>{{conto}}</b>
+               <ul class="collapsible" data-collapsible="accordion">
+               {% if clienti %}
+                
+    <li>
+      <div class="collapsible-header"><i class="material-icons">person</i>Seleziona Cliente Esistente</div>
+      <div class="collapsible-body"> <form action="{% url 'addprenotazione4' %}" method="POST">
+                        {% csrf_token %}
+                    <input type="hidden" value="0" name="clientmode"> 
+                    <input type="hidden" value="{{start|date:'d/m/Y'}}" name="start">
+                    <input type="hidden" value="{{end|date:'d/m/Y'}}" name="fine">
+                    <input type="hidden" value="{{num_ospiti}}" name="num_ospiti">
+                    <input type="hidden" value="{{camera.id}}" name="room">
+                    <input type="hidden" value="{{conto}}" name="conto">  
+                    <div class="input-field col s12">
+          <i class="material-icons prefix">add</i>
+          <input type="text" id="cliente" class="autocomplete" value="{{cliente.id}}">
+          <label for="cliente">Cliente abituale	- PASSARE IL VALUE -</label>
+        </div>                                        
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Completa<i class="material-icons right">send</i>
+                    </button>
+                  </form></div>
+    </li>
+    {% endif %}
+    <li>
+      <div class="collapsible-header"><i class="material-icons">add</i>Nuovo cliente</div>
+      <div class="collapsible-body"><form action="{% url 'addprenotazione4' %}" method="POST">
+                        {% csrf_token %}
+                    <input type="hidden" value="1" name="clientmode"> 
+                    <input type="hidden" value="{{start|date:'d/m/Y'}}" name="start">
+                    <input type="hidden" value="{{end|date:'d/m/Y'}}" name="fine">
+                    <input type="hidden" value="{{num_ospiti}}" name="num_ospiti">
+                    <input type="hidden" value="{{camera.id}}" name="room">
+                    <input type="hidden" value="{{conto}}" name="conto">                     
+                    <h4>Cliente nuovo!</h4>
+                    <div class="row">
+                    <input type="text" name="nome" placeholder="nome">
+                    <input type="text" name="cognome" placeholder="cognome">
+                    <input type="tel" name="tel" placeholder="telefono">
+                    <input type="email" name="email" placeholder="email">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Completa prenotazione
+    <i class="material-icons right">send</i>
+                    </button></div>
+                  </form></div>
+    </li>
+   
+  </ul>
+   </div>
+   </div>         
+           
+{% endblock %}
+{% block script %}
+<script>
+ $(document).ready(function () {$('input.autocomplete').autocomplete({
+            data: {
+            	{% for cliente in clienti %}
+                "{{cliente.nome}} {{cliente.cognome}}":null,          
+                {% endfor %}
+            }});
+            });
+</script>
+{% endblock %}

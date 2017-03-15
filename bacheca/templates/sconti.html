@@ -1,0 +1,47 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Sconti
+{% endblock %}
+{% block css_special %}
+
+    {% endblock %}
+
+{% block content %}
+
+             		<div class="col s12 m6 l6">
+             		<form role="form" id="sconti" action="{% url 'sconti' %}" method="post">
+    {% csrf_token %}
+    <div>
+  <h3 class="teal  white-text center-align uppercase z-depth-2" style="padding: 1%">Crea un pacchetto sconto</h3>
+        <label>Nome sconto</label>
+        <input type="text" name="sconto-1">
+        <label>Percentuale Sconto</label>
+        <input type="number" name="percentuale-1">
+        <div class="input-field col s12 ">
+        <select name="tipo-1">
+      <option value="" disabled selected>Scegli opzione</option>
+      <option value="N">Su un costo notte per tutto il periodo</option>
+            <option value="T">Sul totale</option>
+    </select>
+    <label>Scegli tipo di applicazione</label>
+  </div>
+    </div>
+   <button class="btn waves-effect waves-light blue" type="submit" name="action">Aggiungi
+    <i class="material-icons right">send</i>
+  </button> 
+</form>
+             		</div>
+             		<div class="col s12 m6 l6">
+                        <h3 class="teal white-text center-align uppercase z-depth-1" style="padding: 1%">I tuoi pacchetti sconto</h3>
+                        {% for sconto in sconti %}
+                        <p>{{sconto.name}} - {{sconto.tipo}} - {{sconto.percentage}}% <a href="{% url 'index' %}eliminate_sconto/{{sconto.id}}">delete </a> </p>
+                        {% endfor %}
+             		</div>
+            </div>
+            
+    </div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

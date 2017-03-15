@@ -1,0 +1,33 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Configura le camere
+{% endblock %}
+
+{% block content %}
+
+             	 <h3 class="blue-grey white-text center-align uppercase z-depth-2" style="padding: 1%">Configura tipi camera</h3>
+             	   <a class="btn" onclick="Materialize.toast('Tipi di camera ES: DELUXE, STANDARD, SUITE', 9000)">?</a>
+
+             	<div class="col l8 m 8 offset-l2 offset-m2">
+                <form role="form"  action="{% url 'maketipi' %}" method="POST">
+                    {% csrf_token %}
+                    <div id="formtyp">
+                        <div>
+                            <label>Tipo 1</label>
+                            <input type="text" name="name-1"/>
+                        </div>
+                    </div>
+                   <button class="btn waves-effect waves-light green  btn-large" type="submit" name="action">Salva
+    <i class="material-icons right">done</i>
+  </button>
+                </form><br>
+               <a class="waves-effect waves-light btn btn-large blue lighten-2" id="addType"><i class="material-icons left">add</i>Aggiungi tipo camera</a>
+
+                </div>                  
+			
+{% endblock %}
+
+
+{% block script %}
+    <script type="text/javascript" src="{{STATIC_URL}}js/custom-typ.js"></script>
+{% endblock %}

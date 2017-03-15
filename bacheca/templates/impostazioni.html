@@ -1,0 +1,61 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Impostazioni
+{% endblock %}
+
+
+{% block content %}
+
+             	<h3 class="orange">Modifica le tue configurazioni</h3>
+             	<div class="row">
+             	<div class="col l4 grey ">
+                <h4>Periodi</h4>
+                {% for periodo in periodi %}
+                {{periodo.name}}
+                {{periodo.start_data | date:'d/m/Y'}}
+                {{periodo.end_data | date:'d/m/Y'}}
+                <hr>
+                {% endfor %}
+                <button>Add Periodo</button>
+                </div>
+                <div class="col l4 grey darken-1">
+                <h4>Tipi Camera</h4>
+                {% for tipo in tipi %}
+                <input type="text" value="{{tipo.name}}"></input>
+                <hr>
+                {% endfor %}
+                <button>Add Tipo</button>
+                </div>
+                <div class="col l4 grey darken-3">
+                <h4>Tariffe</h4>
+                {% for tariffa in tariffe %}
+                <label>
+                {{tariffa.tipo.name}} - 
+                {{tariffa.periodo.name}}
+                </label>
+                <input type="number" value="{{tariffa.cost}}"></input>
+                {% endfor %}
+                </div>
+                </div>
+             
+{% endblock %}
+{% block script %}
+<script>
+class Periodo(models.Model):
+    user                = models.ForeignKey(User)
+    name                = models.CharField(max_length= 30)
+    start_data          = models.DateField()
+    end_data            = models.DateField()
+
+class TipoCamera(models.Model):
+    user                = models.ForeignKey(User)
+    name                = models.CharField(max_length= 30)
+            
+class Tariffa(models.Model):
+    user = models.ForeignKey(User)
+    tipo = models.ForeignKey(TipoCamera)
+    periodo = models.ForeignKey(Periodo)
+    cost = models.DecimalField(max_digits = 10,decimal_places=2)
+</script>
+             
+{% endblock %}

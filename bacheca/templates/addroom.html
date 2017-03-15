@@ -1,0 +1,50 @@
+
+{% extends "Head/base.html" %}
+{% block title %}
+Aggiungi camera
+{% endblock %}
+
+{% block content %}
+
+             	  <h3 class="blue-grey white-text center-align uppercase z-depth-2" style="padding: 1%">Configura una camera</h3>
+
+             	 {% if  numbertodocamere %}
+               <h4 class="red darken-1 white-text center-align flow-text bold"> Ti mancano ancora da configurare {{numbertodocamere}} su {{user.num_camere}}</h4>
+
+ 				{% endif %}  
+
+    <form class="col s12" role="form" action="{% url 'addroom' %}" method="post">
+    
+    {% csrf_token %}
+    <div class="row">
+        <div class="input-field col l6 m6 ">
+          <input id="camera_numero" type="number" class="validate" name="numero">
+          <label for="numero_camera">Numero Camera</label>
+        </div>
+        <div class="input-field col l6 m6">
+          <input id="aggiunte" type="number" class="validate" name="numero_posti">
+          <label for="aggiunte">Posti letto</label>
+        </div>        
+     </div> 
+       <div class="row">
+        <div class="input-field col l6 m6">
+       <input id="extra_posti" type="number" class="validate" name="numero_posti_extra">
+       <label for="extra_posti">Posti extra</label>
+   		</div>
+  <div class="input-field col l6 m6">
+         <select name="tipo" class="initialized" >
+         	  <option value="" disabled selected>Tipi di camera</option>
+            {% for tipo in tipi %}
+                   {% if tipo.name  %} <option value="{{tipo.id}}">{{tipo.name}}</option> { % else % } {% endif%}
+            {% endfor %}
+        </select>
+        </div>
+        <button class="btn waves-effect waves-light btn-large" type="submit" name="action">SALVA
+    <i class="material-icons right">add</i>
+  </button>
+    
+    </div>
+</form>
+
+{% endblock %}
+    

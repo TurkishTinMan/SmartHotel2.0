@@ -1,0 +1,126 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Note
+{% endblock %}
+
+
+{% block content %}
+
+             	
+                {% if todoperiodo or todotipo or todotariffe or todocamere %}
+                <ul class="collection red  flow-text" style="text-transform:uppercase;font-weight:bold">
+                    {% if todoperiodo %}
+                     <li class="collection-item">
+                         <div>
+                         Devi ancora configurare i tuoi periodi stagionali <a href="{% url 'makeperiod' %}" class="secondary-content "> <i class="material-icons  red  white-text ">skip_next</i></a></div></li>
+
+                {% endif %}
+                {% if todotipo %}
+                      <li class="collection-item"><div>Configura i tipi di camera <a href="{% url 'maketipi' %}" class="secondary-content "> <i class="material-icons  red  white-text ">skip_next</i></a></div></li>      
+                {% endif %}
+                {% if todotariffe %}
+                 <li class="collection-item"> <div>Configura le tue camere<a href="{% url 'maketariffe' %}"class="secondary-content "> <i class="material-icons  red  white-text ">skip_next</i></a></div></li>
+                {% endif %}
+                {% if todocamere %}
+                   <li class="collection-item"> <div>
+                       Ti mancano ancora da configurare {{numbertodocamere}} camere su {{user.num_camere}} <a href="{% url 'addroom' %}" class="secondary-content "><i class="material-icons  red  white-text ">skip_next</i></a></div></li>
+                {% endif %}
+                 </ul>
+                 {% else %}
+                  <div class="row">
+        <div class="col s12 m4 l4">
+          <div class="card teal  darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">NotePrenotazione</span>
+               <div class="row">
+      
+                 <table>
+                     <thead>
+                         <th>Prenotazione</th>
+                         <th>Data</th>
+                         <th>Causale</th>
+                         <th>Eliminazione</th>
+                     </thead>
+                     <tbody>   
+              {% for nota in note_prenotazioni %}
+              <tr>
+                             <td><a href="{% url 'index' %}prenotazione/{{nota.prenotazione.id}}">{{nota.prenotazione.id}}</a></td>
+                             <td>{{nota.data}}</td>
+                             <td>{{nota.causale}}</td>
+                             <td><a href="{% url 'index' %}eliminatenoteprenotazione/{{nota.id}}" class="white-text"><i class="material-icons">delete_forever</i></a></td>
+                         </tr>
+              {% endfor %}
+              </tbody>
+                   
+                 </table>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+        <div class="col s12 m4 l4">
+          <div class="card teal darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">Note Camera</span>
+               <div class="row">
+      
+                 <table>
+                     <thead>
+                         <th>Camera</th>
+                         <th>Data</th>
+                         <th>Causale</th>
+                         <th>Eliminazione</th>
+                     </thead>
+                     <tbody>   
+             {% for nota in note_camere %}
+              <tr>
+                             <td><a href="{% url 'index' %}room/{{nota.camera.id}}">{{nota.camera.numero}}</a></td>
+                             <td>{{nota.data}}</td>
+                             <td>{{nota.causale}}</td>
+                             <td><a href="{% url 'index' %}eliminatenoteprenotazione/{{nota.id}}" class="red-text"><i class="material-icons">delete_forever</i></a></td>
+                         </tr>
+                         
+              {% endfor %}
+              </tbody>
+          </table>
+        </div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col s12 m4 l4">
+          <div class="card teal darken-2">
+            <div class="card-content white-text">
+              <span class="card-title">Note Cliente</span>
+               <div class="row">
+      
+                 <table>
+                     <thead>
+                         <th>Cliente</th>
+                         <th>Data</th>
+                         <th>Causale</th>
+                         <th>Eliminazione</th>
+                     </thead>
+                     <tbody>   
+               {% for nota in note_clienti %}
+              <tr>
+                             <td><a href="{% url 'index' %}client/{{nota.cliente.id}}">{{nota.cliente.cognome}}</a></td>
+                             <td>{{nota.data}}</td>
+                             <td>{{nota.causale}}</td>
+                             <td><a href="{% url 'index' %}eliminatenoteclient/{{nota.id}}" class="white-text"><i class="material-icons">delete_forever</i></a></td>
+                         </tr>
+                         
+              {% endfor %}
+              </tbody>
+          </table>
+        </div>
+            
+          </div>
+        </div>
+      </div>
+          </div>
+        </div>
+      </div>
+       {% endif %}
+      
+{% endblock %}

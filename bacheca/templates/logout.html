@@ -1,0 +1,19 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Logout
+{% endblock %}
+{% block css_special %}
+ <style>
+ 	#header{display: none}
+ 	#content{margin:0}
+ </style>
+    {% endblock %}
+{% block content %}
+<div class="col l12 s12 m12 center-align " style="background: #e84c3d;min-height: 100vh">
+	<img src="{{STATIC_URL}}/img/lock.ico" class="padding"/>
+	<h3 class="white-text">Logout effettuato!<br> Rieffettua il log in per accedere al pannello di controllo</h3>
+	<div class="col l4 offset-l4">
+ <a class="btn waves-effect waves-light col s12" href="{% url 'login' %}">Login</a>
+ </div></div>
+
+{% endblock%}

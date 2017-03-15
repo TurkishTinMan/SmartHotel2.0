@@ -1,0 +1,153 @@
+{% extends "Head/base.html" %}
+{% block title %}
+{{user.name_structure}}
+{% endblock %}
+{% block css_special %}
+
+{% endblock %}
+
+{% block content %}
+ 
+                {% if todoperiodo or todotipo or todotariffe or todocamere %}
+                <ul class="collection red  flow-text" style="text-transform:uppercase;font-weight:bold">
+                    {% if todoperiodo %}
+                     <li class="collection-item">
+                         <div>
+                         Devi ancora configurare i tuoi periodi stagionali <a href="{% url 'makeperiod' %}" class="secondary-content "> <i class="material-icons  red  white-text ">skip_next</i></a></div></li>
+
+                {% endif %}
+                {% if todotipo %}
+                      <li class="collection-item"><div>Configura i tipi di camera <a href="{% url 'maketipi' %}" class="secondary-content "> <i class="material-icons  red  white-text ">skip_next</i></a></div></li>      
+                {% endif %}
+                {% if todotariffe %}
+                 <li class="collection-item"> <div>Configura le tue camere<a href="{% url 'maketariffe' %}"class="secondary-content "> <i class="material-icons  red  white-text ">skip_next</i></a></div></li>
+                {% endif %}
+                {% if todocamere %}
+                   <li class="collection-item"> <div>
+                       Ti mancano ancora da configurare {{numbertodocamere}} camere su {{user.num_camere}} <a href="{% url 'addroom' %}" class="secondary-content "><i class="material-icons  red  white-text ">skip_next</i></a></div></li>
+                {% endif %}
+                 </ul>
+                 {% else %}
+             <div class="row">
+              <div class="col s12 m4 l4">
+                   
+                    <ul id="issues-collection" class="collection">
+                                    <li class="collection-item avatar center-align">
+                                       <i class="material-icons green large circle white-text">arrow_downward</i>
+                                         <h4 class="header">ARRIVI</h4>
+                                        <p>Sono in arrivo<strong class="green white-text ">{{arrivicount}}</strong> persone</p>
+                                        <a href="#" class="secondary-content"></a>
+                                    </li>
+                                    {% for arrivo in arrivi %}
+                                    <li class="collection-item">
+                                    	 <a href="/prenotazione/{{arrivo.id}}/" >
+                                        <div class="row">
+                                            <div class="col s10">
+                                              <strong> #{{arrivo.camera.numero}} </strong>   {{arrivo.cliente.cognome}}
+                                                {% for nota in arrivo.note_prenotazione %}
+                                                    {{nota.causale}}
+                                                {% endfor %}
+                                                {% for nota in arrivo.note_cliente %}
+                                                    {{nota.causale}}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="col s2">
+                                               {% if arrivo.cliente.pericolo == 'M' %}<i class="small material-icons orange-text">warning</i>
+                        	{% elif arrivo.cliente.pericolo == 'E' %} <i class="small material-icons red-text">warning</i>
+                        	{% elif arrivo.cliente.pericolo == 'T' %}<i class="small material-icons green-text">thumb_up</i> 
+                        	{% endif %}</span>
+                                            </div>
+                                           
+                                        </div></a>
+                                    </li>
+                                     {% endfor %}
+                                                                        
+                                </ul>
+                </div>
+             <div class="col s12 m4 l4">
+                    
+                    <ul id="issues-collection" class="collection">
+                                    <li class="collection-item avatar center-align">
+                                       <i class="material-icons red darken-1 large circle white-text">arrow_upward</i>
+                                        <h4 class="header">PARTENZE</h4>
+                                        <p >Sono in partenza <strong class="red darken-1 white-text " >{{partenzecount}}</strong> persone</p>
+                                        <a href="#" class="secondary-content"></a>
+                                    </li>
+                                   {% for partenza in partenze %}
+                                    <li class="collection-item">
+                                    	 <a href="/prenotazione/{{partenza.id}}/" >
+                                        <div class="row">
+                                            <div class="col s8">
+                                              <strong>Camera #{{partenza.camera.numero}}</strong> {{partenza.cliente.cognome}} 
+                                               {{partenza.cliente.note}}
+                                            </div>
+                                             {% if arrivo.cliente.acconto_fatto  %}
+                                            <div class="col s2">                                         	
+                                              
+                                               {{acconto_versato}}
+                                               
+                                              </div>
+                                               <div class="col s2">
+                                              Conto € {{partenza.conto_base}}
+                                              Da saldare
+                                            </div>
+                                              {% endif %}
+                                                                                        
+                                              <div class="col s4">
+                                              	PAGATO<i class="small material-icons green-text">thumb_up</i>
+                        	<!--{% if arrivo.cliente.saldato  %}
+                                               PAGATO<i class="small material-icons green-text">thumb_up</i>
+                                               {% else %}
+                                               DA PAGARE<i class="small material-icons red-text">warning</i>            
+                                                    {% endif %}-->
+                                            </div>                                            
+                                        </div>
+                                        </a>
+                                    </li>
+                                     {% endfor %}
+                                                                        
+                                </ul>
+                </div>
+             <div class="col s12 m4 l4">
+             	 <div class="card-panel teal">
+          <h5 class="flow-text white-text">Nell' Hotel ci sono <strong>{{presenze}}</strong> persone
+          </h5>
+        </div>
+        <div class="card blue-grey ">
+            <div class="card-content white-text">
+              <span class="card-title">ATTENZIONE INTERVENTI CAMERE</span>
+              <p><BR>
+              	{% for nota in note_camera %}
+              	<div class="chip red white-text">
+   Camera # {{nota.camera.numero}}:{{nota.causale}} Aggiunta il : {{nota.data|date:'d-m-y'}}
+                    <a href="{% url 'index' %}eliminatenotecamera/{{nota.id}}/"><i class="close material-icons">close</i></a>
+  </div>
+        {% endfor %}
+              </p>
+            </div>            
+          </div>
+             </div>
+             
+             
+                </div>        
+                {% endif %}
+            
+
+{% endblock %}
+                 
+
+{% block script %}
+
+    <!-- sparkline -->
+    <script type="text/javascript" src="{{STATIC_URL}}/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}/js/plugins/sparkline/sparkline-script.js"></script>
+    
+    <!-- google map api -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAZnaZBXLqNBRXjd-82km_NO7GUItyKek"></script>
+
+    <!--jvectormap-->
+    <script type="text/javascript" src="{{STATIC_URL}}/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}/js/plugins/jvectormap/vectormap-script.js"></script>    
+
+{% endblock %}

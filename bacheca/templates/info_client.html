@@ -1,0 +1,106 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Cliente {{cliente.cognome}}
+{% endblock %}
+ {% block css_special %}
+
+ <style>
+ 	h4{font-size:1.8rem}
+ </style>
+    {% endblock %}
+{% block content %}
+    
+<div class="row">
+	 <ul class="tabs" style="overflow: hidden">
+		   <li class="tab col s3"><a class="active" href="#info"><h4>Informazioni</h4></a></li>
+		   <li class="tab col s3"><a  href="#modifica"><h4>Modifica</h4></a></li>
+     </ul>
+ 
+ <div id="info">
+    	<div class="col s12 m6 l6 card teal darken-3 white-text center-align">
+    <h4 class="white-text ">NOME: {{cliente.nome}}<br><hr>
+    	COGNOME: {{cliente.cognome}}<br><hr>
+    	{% if cliente.pericolo == 'M' %}TIPO CLIENTE MEDIO: <i class="big material-icons orange-text">warning</i>
+                        	{% elif cliente.pericolo == 'E' %}TIPO CLIENTE ESIGENTE: <i class="big material-icons red-text">warning</i>
+                        	{% elif cliente.pericolo == 'T' %}TIPO CLIENTE TRANUILLO: <i class="big material-icons green-text">thumb_up</i> 
+                        	{% endif %}<br><hr>
+            	EMAIL: <a href="mailto:{{cliente.mail}}">{{cliente.mail}}</a><br><hr>
+             	TELEFONO:<a href="tel:{{cliente.telefono}} "> {{cliente.telefono}}</a> </h4>
+     </div>
+ 
+ 	<div class="col s12 m6 l6 center-align ">
+ 		 <h4 class="orange-text">Note</h4>
+        {% for nota in note %}
+            {{nota.data}}-{{nota.causale}}
+        {% endfor %}
+        <form action="{% url 'index'%}client/{{cliente.id}}/" method="post">
+            {% csrf_token %}
+        <div class="input-field col s9 offset-s1 center-align">       		
+          <textarea id="textarea1" class="materialize-textarea" name="nota"></textarea>
+          <label for="textarea1">Nuova nota</label>
+          <button type="submit" class="waves-effect waves-light btn-large"><i class="material-icons left">add</i>Aggiungi nota</button>
+        </div>
+        </form>
+    </div>
+    </div>
+             	
+  <div id="modifica" class="col s12 l12 m12 center-align">
+    	<form action="{% url 'index' %}modifyclient/{{cliente.id}}/" method="POST" >
+                    {% csrf_token %}
+                    <div class="col s12 center-align">
+                    	<div class="col s6">
+                   <h4>  Nome:</h4></div>
+                     <div class="col s6">
+                     <input name="nome" type="text" value="{{cliente.nome}}" class="bordered flow-text">
+                    </div>
+                    <div class="col s6">
+                   <h4>  Cognome</h4></div>
+                    <div class="col s6">
+                    <input name="cognome" type="text" value="{{cliente.cognome}}" class="flow-text">
+                    </div>
+                    <div class="col s6">
+                   <h4>  Numero Posti Extra:</h4></div>
+                    <div class="col s6">
+                    <input name="telefono" type="tel" value=" {{cliente.telefono}}" class="flow-text">
+                    </div>
+                    <div class="col s6">
+                   <h4>  e-mail</h4></div>
+                    <div class="col s6">
+                    <input name="mail" type="email" value="  {{cliente.mail}}" class="flow-text">
+                    </div>
+                    <div class="col s6">
+                   <h4> Cambia tipo:</h4></div>
+                    <div class="col s6">
+                    <select name="pericolo">
+                        
+                        <option value="E" {% if cliente.pericolo == 'E' %} selected {% endif %}>Esigente</option>
+                        <option value="M" {% if cliente.pericolo == 'M' %} selected {% endif %}>Medio</option>  
+                        <option value="T" {% if cliente.pericolo == 'T' %} selected {% endif %}>Tranquillo</option>      
+                       
+                    </select>
+                    </div>
+                    </div>
+                    <button class="btn waves-effect waves-light " type="submit" name="action">Applica modifiche
+  					  <i class="material-icons right">done</i>
+  					</button>
+                    
+                    </form>
+                    </div>                   
+</div>         	   
+                <hr>
+                <div class="row">
+                	<h3>Precedenti vanze</h3>
+                <ul class="collapsible" data-collapsible="accordion">
+   {% for prenotazione in prenotazioni %}
+    <li>
+      <div class="collapsible-header"><i class="material-icons">filter_drama</i>{{prenotazione.id}} | {{prenotazione.data_inizio|date:"Y"}}</div>
+      <div class="collapsible-body"><p>
+      Dal <b>{{prenotazione.data_inizio}}</b> al <b>{{prenotazione.data_fine}}</b><br>
+      Conto: <b>{{prenotazione.conto_base}}</b><br>
+      	<a href="{% url 'index' %}prenotazione/{{prenotazione.id}}">Vai alla prenotazione</a></p></div>
+    </li>
+    {% endfor %}
+  </ul>	
+                     	
+ 	</div>      	
+{% endblock %}

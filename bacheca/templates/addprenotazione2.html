@@ -1,0 +1,40 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Nuova prenotazione
+{% endblock %}
+
+
+{% block content %}
+
+            <h4 class="teal white-text center-align uppercase z-depth-2" style="padding: 1%"> Camere disponibili per {{num_ospiti}} ospiti dal {{start}} al {{end}} </h4>     
+                 <form action="{% url 'addprenotazione3' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{start|date:'d/m/Y'}}" name="start">
+                    <input type="hidden" value="{{end|date:'d/m/Y'}}" name="fine">
+                    <input type="hidden" value="{{num_ospiti}}" name="num_ospiti">
+                    <table class="stripped responsive-table centered highlight">
+							    <thead>
+							      <tr>
+							          <th data-field="id"> - </th>
+							          <th data-field="name">Camera</th>
+							          <th data-field="price">Costo pernotto</th>
+							      </tr>
+							    </thead>
+							     <tbody>
+                    			{% for camera in camere %} 
+							      <tr>
+							        <td><p class="center-align"><input clas="with-gap" name="room" type="radio" id="{{camera.id}}" value="{{camera.id}}"/>
+    <label for="{{camera.id}}"></label>
+  </p></td>
+							        <td>N° {{camera.numero}}</td>
+							        <td>{{camera.tariffa}} €</td>
+							      </tr>
+							      {% endfor %}
+							    </tbody>
+							  </table>
+                      <button class=" btn-floating btn-large waves-effect waves-light" type="submit" name="action"> 
+    <i class="material-icons right">done</i>
+  </button>
+                </form>
+             
+{% endblock %}

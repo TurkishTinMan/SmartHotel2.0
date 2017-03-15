@@ -1,0 +1,67 @@
+{% extends "Head/base.html" %}
+
+{% block title %}Login{% endblock %}
+{% block css_special %}
+ <style>
+ 	#header{display: none}
+ 	html{background:#009688}
+ 	body {
+    background-color: rgba(252, 252, 252, 0);
+}
+ </style>
+ {% endblock %}
+{% block content %}
+
+
+    <div class="col l4 offset-l5 ">
+      <form class="login-form" id="formlog"  action="{% url 'login' %}" method="POST">
+          {% csrf_token %}
+
+        <div class="row">
+          <div class="input-field col s12 center-align">
+            <img src="{{STATIC_URL}}img/logow.png" alt="" class="circle  responsive-img profile-image-login">
+            <p class="center login-form-text">SmartHotel Login</p>
+            {% if errore == 1 %}
+            <div class="chip red white-text">User o password errati
+                <i class="close material-icons">close</i>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="row margin ">
+          <div class="input-field col s12 ">
+           
+            <input id="username" type="text" name="username">
+            <label class="white-text" for="username" >Username</label>
+          </div>
+        </div>
+        <div class="row margin">
+          <div class="input-field col s12  ">
+           
+            <input id="password" type="password" name="password">
+            <label class="white-text" for="password">Password</label>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="input-field col s12">
+            <button class="btn waves-effect waves-light col s12" type="submit">Login</button>
+          </div>
+        </div>
+    
+          <div class="row">
+          <div class="input-field col s4 m4 l6">
+            <p class="margin medium-small"><a href="{% url 'registration' %}" class="btn green darken-1 waves-effect waves-dark" >Registrati</a></p>
+          </div>
+          <div class="input-field col s4 m4 l6">
+              <p class="margin right-align medium-small"><a href="page-forgot-password.html" class="btn red lighten-2 waves-effect waves-dark" >Forgot password ?</a>               </p>
+          </div>          
+        </div>
+          </form>
+       
+    </div>
+          </div>    
+{% endblock%}  
+
+
+  

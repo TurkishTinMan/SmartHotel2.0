@@ -1,0 +1,26 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Profilo
+{% endblock %}
+
+
+{% block content %}
+
+             		<div class="col l10 offset-l1 grey lighten-4">
+             	<h3 class="green darken-1 white-text center-align">Il tuo account smartHotel</h3>
+                <h4>
+                	<ul>
+                <li>Username: {{user.user.username}}</li>
+                <hr>
+                <li>Email: {{user.user.email}}     </li>
+                <hr>
+                <li>Nome Hotel: {{user.name_structure}}</li>
+                <hr>
+                <li>Numero camere:{{user.num_camere}}</li>
+                <hr>
+                <li>Inizio abbonamento smartHotel:{{user.start_data}}</li><br /><hr>
+                <li>Scadenza abbonamento: {{user.end_data}}</li> <hr></ul></h4>
+                 <h3>cambia password</h3>
+                 </div>
+                 
+{% endblock %}

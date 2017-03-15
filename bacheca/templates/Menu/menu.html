@@ -1,0 +1,106 @@
+     <header id="header" class="page-topbar">
+     	
+        <!-- start header nav-->
+        <div class="navbar-fixed">
+            <nav class=" teal darken-2">
+                <div class="nav-wrapper">                    
+                    
+                    <ul class="left">
+                      <li class="no-hover"><a href="#" data-activates="slide-out" class="menu-sidebar-collapse btn-floating btn-flat btn-medium waves-effect waves-light  teal lighten-1 hide-on-large-only">
+                      	<i class="material-icons" >menu</i></a></li>
+                      <li><h1 class="logo-wrapper"><a href="{% url 'index' %}" class="brand-logo darken-1"><img src="{{STATIC_URL}}img/logow.png" alt="materialize logo" height="35px" style="width:auto!important"></a> <span class="logo-text">Materialize</span></h1></li>
+                    </ul>
+                    
+                       <a class="brand-logo center" style="text-transform: uppercase"> {{user.name_structure}}</a>
+                        
+                    <ul class="right hide-on-med-and-down">      <!-- creare myprofile-->                  
+                        <li><a href="{% url 'myprofile' %}" class="waves-effect waves-block waves-light"><i class="material-icons">perm_identity</i></a>
+                        </li>
+                        <li><a href="{% url 'impostazioni' %}" class="waves-effect waves-block waves-light"><i class="material-icons">settings</i></a>
+                        </li>                        
+                        <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen" id="fullscreenbutton"><i class="material-icons">fullscreen</i></a>
+                        </li>                        
+                        <li><a href="{% url 'logout' %}" class="red darken-2  waves-block waves-light "><i class="material-icons">power_settings_new</i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- HORIZONTL NAV START-->
+             <nav id="horizontal-nav" class="white hide-on-med-and-down">
+                <div class="nav-wrapper">                  
+                  <ul id="nav-mobile" class="left hide-on-med-and-down">
+                  	<li>
+                        <a href="{% url 'index' %}" class=" teal-text text-lighten-1">
+                            <i class="material-icons">dashboard</i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'tableau' %}" class=" teal-text text-lighten-1">
+                            <i class="material-icons">view_list</i>
+                            <span>Tableau</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'addprenotazione' %}" class=" teal-text text-lighten-1">
+                            <i class="material-icons">edit</i>
+                            <span>Prenota</span>
+                        </a>
+                    </li>
+                     <li>
+                        <a href="{% url 'viewroom' %}" class=" teal-text text-lighten-1">
+                            <i class="material-icons">room_service</i>
+                            <span>Camere</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'rubrica' %}" class=" teal-text text-lighten-1">
+                            <i class="material-icons">assignment_ind</i>
+                            <span>Rubrica</span>
+                        </a>
+                    </li>
+                     <li>
+                        <a href="{% url 'note' %}" class=" teal-text text-lighten-1">
+                            <i class="material-icons">speaker_notes</i>
+                            <span>Note</span>
+                        </a>
+                    </li>
+                     <li>
+                        <a href="{% url 'prenotazioni' %}" class=" teal-text text-lighten-1">
+                            <i class="material-icons">toc</i>
+                            <span>Prenotazioni</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'sconti' %}" class=" teal-text text-lighten-1">
+                            <i class="material-icons ">money_off</i>
+                            <span class="">Sconti</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'extra' %}" class=" teal-text text-lighten-1">
+                            <i class="material-icons ">euro_symbol</i>
+                            <span class="">Extra</b></span>
+                        </a>
+                    </li>
+                      
+                         {% if not todoperiodo %}
+                       <li>
+                            <a href="{% url 'makeperiod' %}" class="grey lighten-1 white-text ">
+                            <i class="material-icons ">today</i>
+                          <span class=""><b> Sei nel periodo: {{mioperiodo.name}}</b>
+                                </span>
+                           </a>
+                      </li>
+                         {% endif %}  
+                    
+                      
+                                        
+                  </ul>
+                </div>
+             </nav>           
+        </div>
+        <!-- end header nav-->
+    </header>
+    <!-- END HEADER -->    

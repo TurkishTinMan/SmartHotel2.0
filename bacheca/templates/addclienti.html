@@ -1,0 +1,46 @@
+{% extends "Head/base.html" %}
+{% block title %}
+Add cliente{% endblock %}
+
+
+{% block content %}
+
+  <h3 class="blue-grey white-text center-align uppercase z-depth-2" style="padding: 1%">Aggiungi un nuovo cliente</h3>
+</div>
+                {% if errore %}
+                {{errore}}
+                {% endif %}
+          	<form method="POST" action="{% url 'addclienti' %}">
+                    {% csrf_token %}      
+     <div class="row container">
+     
+        <div class="input-field col l6 m6 ">
+          <input id="nome" type="text" class="validate" name="nome" >
+          <label for="nome">Nome</label>
+        </div>
+        <div class="input-field col l6 m6">
+          <input id="cognome" type="text" class="validate" name="cognome" >
+          <label for="Cognome">Cognome</label>
+        </div> 
+        </div>   
+     <div class="row container">
+        <div class="input-field col l6 m6 ">
+          <input id="telefono" type="tel" class="validate" name="telefono" >
+          <label for="telefono">Telefono</label>
+        </div>
+        <div class="input-field col l6 m6">
+          <input id="mail" type="email" class="validate" name="mail" >
+          <label for="mail">E-mail</label>
+        </div>        
+     </div> 
+        <select class="container" name="tipo">
+        <option value="E">Esigente</option>
+        <option value="M">Medio</option>
+        <option value="T">Tranquillo</option>
+    </select>
+    <button class="btn waves-effect waves-light" type="submit" name="action">Aggiungi
+    <i class="material-icons right">done</i>
+  </button>
+                </form>
+                
+{% endblock %}
